@@ -4,7 +4,7 @@ import { IslandLore } from "../types";
 export const analyzeIslandImage = async (base64Image: string): Promise<IslandLore> => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-  const cleanBase64 = base64Image.split(',')[1] || base64Image;
+  const cleanBase64 = base64Image.includes(',') ? base64Image.split(',')[1] : base64Image;
 
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
