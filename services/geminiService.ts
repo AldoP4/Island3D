@@ -4,22 +4,14 @@ import { IslandLore } from "../types";
 export const analyzeIslandImage = async (base64Image: string): Promise<IslandLore> => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-  // Remove header if present in base64 string
   const cleanBase64 = base64Image.split(',')[1] || base64Image;
 
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: {
       parts: [
-        {
-          inlineData: {
-            mimeType: "image/jpeg",
-            data: cleanBase64
-          }
-        },
-        {
-          text: "Analyze this image of a floating fantasy island. Create a creative lore description for it. Return JSON."
-        }
+        { inlineData: { mimeType: "image/jpeg", data: cleanBase64 } },
+        { text: "Analyze this image and generate island lore." }
       ]
     },
     config: {
@@ -27,22 +19,22 @@ export const analyzeIslandImage = async (base64Image: string): Promise<IslandLor
       responseSchema: {
         type: Type.OBJECT,
         properties: {
-          name: { type: Type.STRING, description: "A mystical name for the island" },
-          description: { type: Type.STRING, description: "A 2 sentence poetic description of the scenery" },
-          element: { type: Type.STRING, description: "The primary magical element (Air, Water, Nature, Void)" },
-          dangerLevel: { type: Type.STRING, description: "Safe, Moderate, or Deadly" },
-          inhabitants: { 
-            type: Type.ARRAY, 
-            items: { type: Type.STRING }, 
-            description: "List of 3 mythical creatures likely to live there" 
+          name: { type: Type.STRING },
+          description: { type: Type.STRING },
+          element: { type: Type.STRING },
+          dangerLevel: { type: Type.STRING },
+          inhabitants: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
           }
-        }
+        },
+        required: ["name", "description", "element", "dangerLevel", "inhabitants"]
       }
     }
   });
 
   const text = response.text;
-  if (!text) throw new Error("No response from Gemini");
+  if (!text) throw new Error("No response");
   
   return JSON.parse(text) as IslandLore;
 };
