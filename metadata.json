@@ -1,0 +1,5 @@
+{
+  "name": "Aether Isles 3D Explorer",
+  "description": "Una experiencia 3D interactiva que transforma imágenes de islas flotantes en entornos visuales, utilizando Gemini para generar historia y contexto.",
+  "requestFramePermissions": []
+}
