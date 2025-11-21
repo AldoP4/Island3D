@@ -2,12 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { IslandLore } from "../types";
 
 export const analyzeIslandImage = async (base64Image: string): Promise<IslandLore> => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    throw new Error("API Key not found");
-  }
-
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   // Remove header if present in base64 string
   const cleanBase64 = base64Image.split(',')[1] || base64Image;
